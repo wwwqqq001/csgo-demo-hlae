@@ -1,0 +1,43 @@
+提供一个简单的Windows批处理脚本，用于在命令行中显示滚动的心形图案。你可以将以下代码复制到记事本中，然后将文件保存为“.bat”扩展名，以便在Windows命令提示符中运行。
+
+bash
+Copy code
+@echo off
+setlocal enabledelayedexpansion
+
+:: 设置需要滚动的字符串
+set "heart=     ♥♥♥♥♥♥     ♥♥♥♥♥♥
+   ♥♥♥♥♥♥♥♥   ♥♥♥♥♥♥♥♥
+  ♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥
+  ♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥
+   ♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥
+     ♥♥♥♥♥♥♥♥♥♥♥♥
+       ♥♥♥♥♥♥♥♥
+         ♥♥♥♥
+           ♥"
+
+:: 设置滚动速度和方向
+set "delay=80"
+set "direction=right"
+
+:: 计算字符串长度并存储到变量中
+set "length=0"
+for /f "tokens=1,* delims=]" %%a in ('"prompt $h[$ECHO OFF]"') do (
+  set "BS=%%b"
+)
+for %%a in (%heart%) do (
+  set /a "length+=1"
+)
+
+:: 定义循环和滚动函数
+:loop
+if "%direction%"=="right" (
+  set "heart=%heart:~1%%heart:~0,1%"
+) else (
+  set "heart=%heart:~-1%%heart:~0,-1%"
+)
+cls
+echo %heart%
+ping -n 1 -w %delay% 127.0.0.1 >nul
+goto loop
+运行后，你将看到在命令行中滚动显示的心形图案。你可以通过修改“delay”变量来改变滚动速度，也可以通过修改“direction”变量来更改滚动方向。
